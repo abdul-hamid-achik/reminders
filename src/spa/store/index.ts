@@ -9,11 +9,11 @@ const remindersReducer = createSlice({
   name: "reminders",
   initialState: [] as Reminder[],
   reducers: {
-    add: (state, action: PayloadAction<Reminder>) => {
+    create: (state, action: PayloadAction<Reminder>) => {
       state.push(action.payload);
     },
 
-    remove: (state, action: PayloadAction<Reminder>) => {
+    delete: (state, action: PayloadAction<Reminder>) => {
       const index = state.findIndex(
         (reminder) => reminder.id === action.payload.id
       );
@@ -30,13 +30,16 @@ const remindersReducer = createSlice({
         state[index] = action.payload;
       }
     },
+
+    set: (state, action: PayloadAction<Reminder[]>) => {
+      return action.payload;
+    },
   },
 });
 
 export const store = configureStore({
   reducer: {
-    // @ts-ignore
-    reminders: remindersReducer,
+    reminders: remindersReducer.reducer,
   },
 });
 
