@@ -11,10 +11,13 @@ const config = {
   reactStrictMode: true,
   async rewrites() {
     return [
-      // Rewrite everything else to use `pages/index`
       {
-        source: '/:path*',
-        destination: '/',
+        source: "/api/:path*",
+        destination: "/api/:path*",
+      },
+      {
+        source: "/:path*",
+        destination: "/",
       },
     ];
   },

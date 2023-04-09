@@ -16,7 +16,7 @@
     "@prisma/client": "^4.11.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@tanstack/react-query": "^4.28.0",
-    "@tanstack/router": "^0.0.1-beta.83",
+    "@tanstack/react-router": "^0.0.1-beta.83",
     "@tremor/react": "^2.1.0",
     "next": "^13.2.4",
     "next-axiom": "^0.17.0",

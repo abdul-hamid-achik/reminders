@@ -5,8 +5,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Reminder {
@@ -22,13 +23,15 @@ model Reminder {
   list         List?          @relation(fields: [listId], references: [id])
   userId       String
   Notification Notification[]
+
+  @@index([listId])
 }
 
 model List {
   id        Int        @id @default(autoincrement())
   name      String
   reminders Reminder[]
-  userId    String // change to String to match Clerk's user ID type
+  userId    String
 }
 
 model Notification {
@@ -38,4 +41,6 @@ model Notification {
   sentAt     DateTime @default(now())
   reminderId Int
   reminder   Reminder @relation(fields: [reminderId], references: [id])
+
+  @@index([reminderId])
 }
