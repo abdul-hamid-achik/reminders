@@ -1,4 +1,5 @@
 import { type AppType } from "next/dist/shared/lib/utils";
+export { reportWebVitals } from 'next-axiom';
 
 import "@/styles/globals.css";
 

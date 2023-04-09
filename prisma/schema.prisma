@@ -1,17 +1,41 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// schema.prisma
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Reminder {
+  id           Int            @id @default(autoincrement())
+  title        String
+  description  String?
+  dueAt        DateTime?
+  priority     String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  completedAt  DateTime?
+  listId       Int?
+  list         List?          @relation(fields: [listId], references: [id])
+  userId       String
+  Notification Notification[]
+}
+
+model List {
+  id        Int        @id @default(autoincrement())
+  name      String
+  reminders Reminder[]
+  userId    String // change to String to match Clerk's user ID type
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  title      String
+  message    String?
+  sentAt     DateTime @default(now())
+  reminderId Int
+  reminder   Reminder @relation(fields: [reminderId], references: [id])
 }
