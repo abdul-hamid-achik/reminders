@@ -2,12 +2,20 @@
   "name": "reminders",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "dir": "git ls-tree -r --name-only HEAD | tree --fromfile",
+    "migrate": "npx prisma db push",
+    "seed": "npx prisma db seed",
+    "reset": "npx prisma migrate reset --force --skip-seed",
+    "test": "jest"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.15.0",
@@ -18,13 +26,17 @@
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-router": "^0.0.1-beta.83",
     "@tremor/react": "^2.1.0",
+    "http-status": "^1.6.2",
+    "luxon": "^3.3.0",
     "next": "^13.2.4",
     "next-axiom": "^0.17.0",
     "next-sitemap": "^4.0.7",
     "next-swagger-doc": "^0.3.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
     "react-redux": "^8.0.5",
+    "swagger-ui-react": "^4.18.2",
     "tsx": "^3.12.6",
     "zod": "^3.21.4"
   },
@@ -37,6 +49,7 @@
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@types/swagger-ui-react": "^4.18.0",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "autoprefixer": "^10.4.14",

@@ -1,19 +1,12 @@
-import { Link, Outlet } from "@tanstack/react-router";
+import { Link, Outlet, useRouter } from "@tanstack/react-router";
 import { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { useUser } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
+import { Provider } from "react-redux";
+import { store } from "@/spa/store";
 import Image from "next/image";
-
-const navigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Profile", href: "/user-profile", current: false },
-];
-const userNavigation = [
-  { name: "Your Profile", href: "/user-profile" },
-  { name: "Sign out", href: "/sign-out" },
-];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -21,8 +14,32 @@ function classNames(...classes: string[]) {
 
 export default function RootRoute() {
   const { user, isSignedIn } = useUser();
+  const router = useRouter();
+  const { signOut } = useClerk();
+  const navigation = [
+    { name: "Home", href: "/", current: true },
+    { name: "Profile", href: "/user-profile", current: false },
+  ];
+
+  const userNavigation = [
+    { name: "Your Profile", href: "/user-profile" },
+    {
+      name: "Sign out",
+      href: "/sign-out",
+      onClick: () => {
+        signOut()
+          .then((r) =>
+            router.navigate({
+              to: "/",
+            })
+          )
+          .catch((e) => console.error(e));
+      },
+    },
+  ];
+
   return (
-    <>
+    <Provider store={store}>
       <div className="min-h-full">
         <Popover as="header" className="bg-indigo-600 pb-24">
           {({ open }) => (
@@ -32,11 +49,11 @@ export default function RootRoute() {
                   {/* Logo */}
                   <div className="absolute left-0 flex-shrink-0 lg:static">
                     <Link to="/">
-                      <span className="sr-only">Your Company</span>
+                      <span className="sr-only">Remindly</span>
                       <Image
                         className="h-8 w-auto"
                         src="/favicon.ico"
-                        alt="Your Company"
+                        alt="Remindly"
                         width={32}
                         height={32}
                       />
@@ -53,6 +70,24 @@ export default function RootRoute() {
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
 
+                    {!isSignedIn && (
+                      <>
+                        <Link
+                          to="/sign-in"
+                          className="ml-8 inline-flex items-center rounded-md border border-transparent bg-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                          Sign in
+                        </Link>
+
+                        <Link
+                          to="/sign-up"
+                          className="ml-3 inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-medium text-indigo-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                          Sign up
+                        </Link>
+                      </>
+                    )}
+
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-4 flex-shrink-0">
                       <div>
@@ -63,6 +98,8 @@ export default function RootRoute() {
                               className="h-8 w-8 rounded-full"
                               src={user.profileImageUrl}
                               alt=""
+                              width={32}
+                              height={32}
                             />
                           )}
                         </Menu.Button>
@@ -77,12 +114,14 @@ export default function RootRoute() {
                           {userNavigation.map((item) => (
                             <Menu.Item key={item.name}>
                               {({ active }) => (
+                                // @ts-ignore
                                 <Link
                                   to={item.href}
                                   className={classNames(
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"
                                   )}
+                                  onClick={item.onClick}
                                 >
                                   {item.name}
                                 </Link>
@@ -142,6 +181,7 @@ export default function RootRoute() {
                     <div className="col-span-2">
                       <nav className="flex space-x-4">
                         {navigation.map((item) => (
+                          // @ts-ignore
                           <Link
                             key={item.name}
                             to={item.href}
@@ -213,10 +253,10 @@ export default function RootRoute() {
                         <div className="pb-2 pt-3">
                           <div className="flex items-center justify-between px-4">
                             <div>
-                              <img
+                              <Image
                                 className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                alt="Your Company"
+                                src="/favicon.ico"
+                                alt="Remindly"
                               />
                             </div>
                             <div className="-mr-2">
@@ -280,10 +320,12 @@ export default function RootRoute() {
                           )}
                           <div className="mt-3 space-y-1 px-2">
                             {userNavigation.map((item) => (
+                              // @ts-ignore
                               <Link
                                 key={item.name}
                                 to={item.href}
                                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
+                                onClick={item.onClick}
                               >
                                 {item.name}
                               </Link>
@@ -304,13 +346,13 @@ export default function RootRoute() {
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="border-t border-gray-200 py-8 text-center text-sm text-gray-500 sm:text-left">
               <span className="block sm:inline">
-                &copy; 2021 Your Company, Inc.
+                &copy; 2023 Remindly, Inc.
               </span>{" "}
               <span className="block sm:inline">All rights reserved.</span>
             </div>
           </div>
         </footer>
       </div>
-    </>
+    </Provider>
   );
 }

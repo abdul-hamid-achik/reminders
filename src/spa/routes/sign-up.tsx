@@ -1,6 +1,9 @@
-import { SignUp } from '@clerk/nextjs'
+import { SignUp } from "@clerk/nextjs";
+
 export default function SignUpRoute() {
-  return <div>
-    <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />
-  </div>;
+  return (
+    <div className="flex items-center justify-center">
+      <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />
+    </div>
+  );
 }

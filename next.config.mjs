@@ -4,16 +4,28 @@
  */
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env.mjs"));
 
-import { withAxiom } from 'next-axiom';
+import { withAxiom } from "next-axiom";
 
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.clerk.dev',
+      },
+    ],
+  },
   async rewrites() {
     return [
       {
         source: "/api/:path*",
         destination: "/api/:path*",
+      },
+      {
+        source: "/docs",
+        destination: "/docs",
       },
       {
         source: "/:path*",
