@@ -35,6 +35,7 @@ export default async function handler(
       });
       res.status(HttpStatus.OK).json(createdReminder);
     } catch (error) {
+      console.error(error);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: "Failed to create reminder." });
@@ -46,6 +47,7 @@ export default async function handler(
       });
       res.status(HttpStatus.OK).json(reminders);
     } catch (error) {
+      console.error(error);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: "Failed to fetch reminders." });

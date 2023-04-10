@@ -49,6 +49,7 @@ export default async function handler(
           .json({ error: "Reminder not found." });
       res.status(HttpStatus.OK).json(reminder);
     } catch (error) {
+      console.error(error);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: "Failed to fetch reminder." });
@@ -62,6 +63,7 @@ export default async function handler(
       });
       res.status(HttpStatus.OK).json(updatedReminder);
     } catch (error) {
+      console.error(error);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: "Failed to update reminder." });
@@ -73,6 +75,7 @@ export default async function handler(
       });
       res.status(HttpStatus.OK).json(deletedReminder);
     } catch (error) {
+      console.error(error);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: "Failed to delete reminder." });

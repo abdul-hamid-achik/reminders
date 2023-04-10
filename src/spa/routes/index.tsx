@@ -6,17 +6,31 @@ import {
 import { useForm } from "react-hook-form";
 import { Prisma } from ".prisma/client";
 import { useUser } from "@clerk/nextjs";
+import { DateTime } from "luxon";
 import ReminderCreateInput = Prisma.ReminderCreateInput;
 
 export default function IndexRoute() {
+  const { register, handleSubmit, reset } = useForm<ReminderCreateInput>();
   const { data = [], isLoading, refetch } = useGetAllRemindersQuery();
   const [create] = useCreateReminderMutation();
-  const { register, handleSubmit, reset } = useForm<ReminderCreateInput>();
   const { user, isSignedIn } = useUser();
   const onSubmit = async (data: ReminderCreateInput) => {
-    await create({ ...data, userId: user!.id });
-    reset();
-    await refetch();
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-non-null-assertion,@typescript-eslint/no-unsafe-assignment
+      const dueAt = DateTime.fromISO(data.dueAt!.toLocaleString())
+        .toUTC()
+        .toISO() as string;
+
+      await create({
+        ...data,
+        dueAt,
+        userId: user!.id,
+      });
+      await refetch();
+      reset();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
