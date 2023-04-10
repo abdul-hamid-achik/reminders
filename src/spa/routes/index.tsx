@@ -8,12 +8,14 @@ import { Prisma } from ".prisma/client";
 import { useUser } from "@clerk/nextjs";
 import { DateTime } from "luxon";
 import Reminder from "@/components/reminder";
+
+import Spinner from "@/components/spinner";
 import ReminderCreateInput = Prisma.ReminderCreateInput;
 
 export default function IndexRoute() {
   const { register, handleSubmit, reset } = useForm<ReminderCreateInput>();
   const { data = [], isLoading, refetch } = useGetAllRemindersQuery();
-  const [create] = useCreateReminderMutation();
+  const [create, { isLoading: isCreating }] = useCreateReminderMutation();
   const { user, isSignedIn } = useUser();
   const onSubmit = async (data: ReminderCreateInput) => {
     try {
@@ -123,9 +125,15 @@ export default function IndexRoute() {
                             ? "bg-indigo-600 px-4 py-2 text-white"
                             : "bg-gray-300 px-4 py-2 text-gray-600"
                         }
-                        disabled={!isSignedIn}
+                        disabled={!isSignedIn || isCreating}
                       >
-                        {isSignedIn ? "Create" : "Sign in to create"}
+                        {isCreating
+                          ? "Creating"
+                          : isSignedIn
+                          ? "Create"
+                          : "Sign in to create"}
+
+                        {isCreating && <Spinner />}
                       </button>
                     </div>
                   </form>

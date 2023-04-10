@@ -3,25 +3,7 @@ import { useUpdateReminderMutation } from "@/spa/services/reminders";
 import { CheckIcon, StarIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Icon } from "@tremor/react";
 import { DateTime } from "luxon";
-
-const Spinner = () => (
-  <svg
-    className="ml-2 mr-3 h-4 w-4 animate-spin text-gray-500"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-  >
-    <circle
-      className="opacity-25"
-      cx="12"
-      cy="12"
-      r="10"
-      stroke="currentColor"
-      strokeWidth="4"
-    />
-    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-  </svg>
-);
+import Spinner from "@/components/spinner";
 
 function Reminder(props: ReminderProps & { refresh: () => Promise<any> }) {
   const [update, { isLoading }] = useUpdateReminderMutation();
@@ -54,12 +36,24 @@ function Reminder(props: ReminderProps & { refresh: () => Promise<any> }) {
       <span>
         {props.dueAt ? (
           <p className="text-sm">
+            due{" "}
             {DateTime.fromISO(props.dueAt as unknown as string).toRelative()}
           </p>
         ) : (
           <p className="text-sm">No due date</p>
         )}
       </span>
+
+      {props.completedAt && (
+        <span>
+          <p className="text-sm">
+            completed{" "}
+            {DateTime.fromISO(
+              props.completedAt as unknown as string
+            ).toRelative()}
+          </p>
+        </span>
+      )}
 
       <button
         className="space-between flex flex-row items-center justify-center rounded-md border-2 border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
@@ -77,7 +71,7 @@ function Reminder(props: ReminderProps & { refresh: () => Promise<any> }) {
           </>
         ) : props.completedAt ? (
           <>
-            Incomplete <XMarkIcon className="ml-2 h-4 w-4" />
+            Cancel <XMarkIcon className="ml-2 h-4 w-4" />
           </>
         ) : (
           <>
