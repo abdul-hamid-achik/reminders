@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { Prisma } from ".prisma/client";
 import { useUser } from "@clerk/nextjs";
 import { DateTime } from "luxon";
+import Reminder from "@/components/reminder";
 import ReminderCreateInput = Prisma.ReminderCreateInput;
 
 export default function IndexRoute() {
@@ -52,7 +53,9 @@ export default function IndexRoute() {
                       <li>Loading</li>
                     ) : data.length > 0 ? (
                       data.map((reminder) => (
-                        <li key={reminder.id}>{reminder.title}</li>
+                        <li key={reminder.id}>
+                          <Reminder {...reminder} refresh={refetch} />
+                        </li>
                       ))
                     ) : (
                       <li>No reminders</li>
