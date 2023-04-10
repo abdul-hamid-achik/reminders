@@ -47,13 +47,15 @@ export default function IndexRoute() {
               </h2>
               <div className="overflow-hidden rounded-lg bg-white shadow">
                 <div className="p-6">
-                  <ul>
+                  <ul className="h-144 max-h-full">
                     {isLoading ? (
                       <li>Loading</li>
-                    ) : (
+                    ) : data.length > 0 ? (
                       data.map((reminder) => (
                         <li key={reminder.id}>{reminder.title}</li>
                       ))
+                    ) : (
+                      <li>No reminders</li>
                     )}
                   </ul>
                 </div>

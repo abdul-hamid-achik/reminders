@@ -46,7 +46,6 @@ export default function RootRoute() {
             <>
               <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="relative flex items-center justify-center py-5 lg:justify-between">
-                  {/* Logo */}
                   <div className="absolute left-0 flex-shrink-0 lg:static">
                     <Link to="/">
                       <span className="sr-only">Remindly</span>
