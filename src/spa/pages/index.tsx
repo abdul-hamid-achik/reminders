@@ -49,7 +49,7 @@ export default function IndexRoute() {
                 Recent reminders
               </h2>
               <div className="overflow-hidden rounded-lg bg-white shadow">
-                <div className="p-6">
+                <div className="overflow-y-auto p-6">
                   <ul className="h-144 max-h-full">
                     {isLoading ? (
                       <li>Loading</li>

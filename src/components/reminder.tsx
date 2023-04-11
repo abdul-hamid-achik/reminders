@@ -26,9 +26,10 @@ function Reminder(props: ReminderProps & { refresh: () => Promise<any> }) {
       <span>
         <Icon
           icon={StarIcon}
-          className={getPriorityColor(props.priority as string)}
+          className={`h-4 w-4 ${getPriorityColor(
+            props.priority as string
+          )} text-black`}
           tooltip={props.priority as string}
-          variant="solid"
         />
       </span>
       <p className="text-sm">{props.title}</p>
@@ -71,13 +72,20 @@ function Reminder(props: ReminderProps & { refresh: () => Promise<any> }) {
           </>
         ) : props.completedAt ? (
           <>
-            Cancel <XMarkIcon className="ml-2 h-4 w-4" />
+            <span className="sr-only">Cancel</span>{" "}
+            <XMarkIcon className="ml-2 h-4 w-4" />
           </>
         ) : (
           <>
-            Complete <CheckIcon className="ml-2 h-4 w-4" />
+            <span className="sr-only">Complete</span>{" "}
+            <CheckIcon className="ml-2 h-4 w-4" />
           </>
         )}
+      </button>
+
+      <button className="space-between flex flex-row items-center justify-center bg-red-500 p-4 text-white">
+        <span className="sr-only">Remove</span>
+        <XMarkIcon className="ml-2 h-4 w-4" />
       </button>
     </div>
   );

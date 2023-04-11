@@ -1,53 +1,59 @@
-import {
-  Router,
-  Route,
-  RootRoute,
-} from '@tanstack/react-router'
-
-import Root from '@/spa/routes/root';
-import Index from '@/spa/routes/index';
-import SignIn from '@/spa/routes/sign-in';
-import SignUp from '@/spa/routes/sign-up';
-import UserProfile from '@/spa/routes/user-profile';
+import { lazy, RootRoute, Route, Router } from "@tanstack/react-router";
 
 const root = new RootRoute({
-  component: Root,
-})
+  component: lazy(() => import("@/spa/pages/root")),
+});
+
 export const index = new Route({
   getParentRoute: () => root,
-  component: Index,
-  path: '/',
-})
+  component: lazy(() => import("@/spa/pages/index")),
+  path: "/",
+});
 
 export const signIn = new Route({
   getParentRoute: () => root,
-  component: SignIn,
-  path: '/sign-in',
-})
+  component: lazy(() => import("@/spa/pages/sign-in")),
+  path: "/sign-in",
+});
 
 export const signUp = new Route({
   getParentRoute: () => root,
-  component: SignUp,
-  path: '/sign-up',
-})
+  component: lazy(() => import("@/spa/pages/sign-up")),
+  path: "/sign-up",
+});
 
 export const userProfile = new Route({
   getParentRoute: () => root,
-  component: UserProfile,
-  path: '/user-profile',
-})
+  component: lazy(() => import("@/spa/pages/user-profile")),
+  path: "/user-profile",
+});
+
+export const dashboard = new Route({
+  getParentRoute: () => root,
+  component: lazy(() => import("@/spa/pages/dashboard")),
+  path: "/dashboard",
+});
 
 const routeTree = root.addChildren([
   index,
   signIn,
   signUp,
   userProfile,
-])
-export const router = new Router({ routeTree })
+  dashboard,
+]);
 
+export const router = new Router({
+  routeTree,
+  loadComponent: async (component) => {
+    if (component.preload) {
+      await component.preload();
+    }
+    return component;
+  },
+});
 
-declare module '@tanstack/router' {
+declare module "@tanstack/router" {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }

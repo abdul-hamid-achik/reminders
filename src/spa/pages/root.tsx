@@ -16,9 +16,19 @@ export default function RootRoute() {
   const { user, isSignedIn } = useUser();
   const router = useRouter();
   const { signOut } = useClerk();
+
   const navigation = [
-    { name: "Home", href: "/", current: true },
-    { name: "Profile", href: "/user-profile", current: false },
+    { name: "Home", href: "/", current: router.basepath === "/" },
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      current: router.basepath === "/dashboard",
+    },
+    {
+      name: "Profile",
+      href: "/user-profile",
+      current: router.basepath === "/user-profile",
+    },
   ];
 
   const userNavigation = [
