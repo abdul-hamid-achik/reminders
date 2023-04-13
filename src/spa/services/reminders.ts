@@ -11,7 +11,7 @@ export const remindersApi = createApi({
     baseUrl:
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000/api"
-        : "https://remindly.dev/api",
+        : "https://www.remindly.dev/api",
   }),
   endpoints: (builder) => ({
     getReminderById: builder.query<Reminder, string>({
